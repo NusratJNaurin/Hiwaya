@@ -1,0 +1,106 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "User account credentials and adventure profile details",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "email": { "type": "string" },
+        "companionId": { "type": "string" },
+        "level": { "type": "number" },
+        "levelTitle": { "type": "string" },
+        "currentXp": { "type": "number" },
+        "xpToNextLevel": { "type": "number" },
+        "streakDays": { "type": "number" },
+        "userRole": { "type": "string" },
+        "ageGroup": { "type": "string" },
+        "membershipPlan": { "type": "string" },
+        "unlockedCourseIds": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "favoriteInterests": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "unlockedBadges": {
+          "type": "array",
+          "items": { "type": "object" }
+        },
+        "vouchers": {
+          "type": "array",
+          "items": { "type": "object" }
+        },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["id", "name", "email"]
+    },
+    "QuestProgress": {
+      "title": "QuestProgress",
+      "description": "Saved milestone and node progress for a specific course",
+      "type": "object",
+      "properties": {
+        "courseId": { "type": "string" },
+        "completedStepNumbers": {
+          "type": "array",
+          "items": { "type": "number" }
+        },
+        "completedCount": { "type": "number" },
+        "isRewardUnlocked": { "type": "boolean" },
+        "nodeStatuses": {
+          "type": "object",
+          "description": "Map of moduleId to completed/active/locked status"
+        },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["courseId"]
+    },
+    "Creation": {
+      "title": "Creation",
+      "description": "Uploaded physical craft project with AI coach feedback",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "title": { "type": "string" },
+        "hobbyName": { "type": "string" },
+        "courseId": { "type": "string" },
+        "imageUrl": { "type": "string" },
+        "uploadedAt": { "type": "string" },
+        "aiFeedback": { "type": "string" },
+        "coachName": { "type": "string" },
+        "authorName": { "type": "string" },
+        "authorAge": { "type": "number" },
+        "authorCity": { "type": "string" },
+        "likesCount": { "type": "number" },
+        "isApprovedByParent": { "type": "boolean" },
+        "moderationStatus": { "type": "string" },
+        "publishedToGallery": { "type": "boolean" },
+        "reactions": { "type": "object" }
+      },
+      "required": ["id", "title", "imageUrl"]
+    }
+  },
+  "firestore": {
+    "collections": {
+      "users": {
+        "path": "users/{userId}",
+        "entity": "UserProfile",
+        "subcollections": {
+          "quest_progress": {
+            "path": "users/{userId}/quest_progress/{courseId}",
+            "entity": "QuestProgress"
+          }
+        }
+      },
+      "creations": {
+        "path": "creations/{creationId}",
+        "entity": "Creation"
+      }
+    }
+  }
+}

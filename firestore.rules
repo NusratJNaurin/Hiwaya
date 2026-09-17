@@ -1,0 +1,41 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // User profile document
+    match /users/{userId} {
+      allow read, write: if isOwner(userId);
+      
+      // Quest progress subcollection per course
+      match /quest_progress/{courseId} {
+        allow read, write: if isOwner(userId);
+      }
+    }
+
+    // Creations collection for physical crafts & gallery
+    match /creations/{creationId} {
+      // Allow reading published creations or owner's creations
+      allow read: if resource == null 
+                  || resource.data.publishedToGallery == true 
+                  || (isAuthenticated() && resource.data.userId == request.auth.uid);
+      
+      // Allow creating by logged-in users
+      allow create: if isAuthenticated();
+
+      // Allow updating by owner or updating likes/reactions
+      allow update: if isAuthenticated();
+      
+      // Allow deletion by owner
+      allow delete: if isAuthenticated() && resource.data.userId == request.auth.uid;
+    }
+  }
+}

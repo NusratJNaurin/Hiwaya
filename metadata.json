@@ -1,0 +1,10 @@
+{
+  "name": "Hiwaya",
+  "description": "Gamified creative-learning adventure platform for kids with 3D companions, interactive origami quests, celebration rewards, and parent oversight hub.",
+  "requestFramePermissions": [
+    "camera"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
