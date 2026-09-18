@@ -704,7 +704,7 @@ export const AdventureMapScreen: React.FC<AdventureMapScreenProps> = ({
               
               <div className="mt-3 w-full bg-white/10 rounded-xl p-2 text-[11px] font-bold">
                 {isRewardUnlocked
-                  ? '⭐ Click to reveal code JARIR-HWY-5829!'
+                  ? '⭐ Quests completed! View Reward Voucher status'
                   : `🔒 Gated: Finish all 4 Quests to unlock (${completedCount}/4 done)`}
               </div>
             </div>

@@ -225,8 +225,8 @@ export const CelebrationScreen: React.FC<CelebrationScreenProps> = ({
 
             <div className="absolute inset-0 flex flex-col items-center justify-center p-4 bg-indigo-950/70 backdrop-blur-[2px]">
               <span className="material-symbols-outlined text-yellow-300 text-2xl mb-1">lock</span>
-              <span className="text-xs font-black text-white">Voucher Code Locked</span>
-              <span className="text-[11px] text-indigo-200">Finish Module 4 to reveal code JARIR-HWY-5829</span>
+              <span className="text-xs font-black text-white">Reward Voucher 🔒</span>
+              <span className="text-[11px] text-indigo-200">Finish Module 4 to unlock all quests</span>
             </div>
           </div>
 
@@ -353,38 +353,45 @@ export const CelebrationScreen: React.FC<CelebrationScreenProps> = ({
 
         {/* Rewards & Feedback Grid (Bento Style) */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 w-full">
-          {/* Voucher Card */}
+          {/* Reward Voucher Card */}
           <div className="bg-white/10 backdrop-blur-xl p-5 md:p-6 rounded-[32px] border border-white/20 shadow-2xl flex flex-col justify-between relative overflow-hidden">
             <div className="absolute top-0 right-0 w-28 h-28 bg-yellow-400/10 rounded-full blur-xl pointer-events-none" />
 
             <div>
-              <div className="flex items-center gap-2 mb-3">
+              <div className="flex items-center gap-2 mb-2">
                 <span className="material-symbols-outlined text-yellow-300 text-2xl" style={{ fontVariationSettings: "'FILL' 1" }}>
                   redeem
                 </span>
-                <h3 className="font-black text-lg text-white uppercase tracking-tight">
-                  Congratulations!
+                <h3 className="font-black text-lg text-white uppercase tracking-tight flex items-center gap-2">
+                  <span>Reward Voucher</span>
+                  <span className="text-base">🔒</span>
                 </h3>
               </div>
-              <p className="text-sm md:text-base text-white/90 font-semibold mb-4 leading-relaxed">
-                You unlocked a <span className="text-yellow-300 font-black">{currentCourse.voucherValue}</span> for {currentCourse.voucherPartner}!
+
+              <div className="inline-flex items-center gap-1.5 bg-yellow-400/20 text-yellow-300 px-3 py-1 rounded-full text-xs font-black uppercase mb-3 border border-yellow-400/30">
+                <span className="material-symbols-outlined text-sm">lock</span>
+                MVP Feature Status
+              </div>
+
+              <p className="text-sm md:text-base text-white/95 font-bold mb-2 leading-snug">
+                🎉 Congratulations! You've completed all the quests.
+              </p>
+
+              <p className="text-xs text-white/80 font-medium mb-3 leading-relaxed">
+                Earned path reward: <span className="text-yellow-300 font-black">{currentCourse.voucherValue}</span> for {currentCourse.voucherPartner}.
               </p>
             </div>
 
             <div className="pt-2">
-              {claimedVoucher ? (
-                <div className="bg-emerald-500/20 border-2 border-emerald-400 text-emerald-300 p-3 rounded-2xl text-center font-black text-sm">
-                  Code: JARIR-HWY-5829 • Ready to Use!
+              <div className="bg-black/30 border border-white/20 rounded-2xl p-4 text-center space-y-1.5 shadow-inner">
+                <div className="flex items-center justify-center gap-1.5 text-xs font-black text-amber-300">
+                  <span className="material-symbols-outlined text-sm">lock</span>
+                  <span>Voucher redemption isn't available in this MVP yet.</span>
                 </div>
-              ) : (
-                <button
-                  onClick={handleClaimVoucher}
-                  className="w-full btn-yellow-tactile py-3.5 px-4 rounded-2xl font-black text-sm uppercase tracking-tight flex items-center justify-center gap-2 shadow-xl cursor-pointer"
-                >
-                  <span className="material-symbols-outlined text-lg">celebration</span>
-                  Claim Reward Voucher (JARIR-HWY-5829)
-                </button>
-              )}
+                <p className="text-[11px] text-white/70 font-medium">
+                  This feature will be available in a future version.
+                </p>
+              </div>
             </div>
           </div>
 

@@ -236,8 +236,8 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
                       🎁
                     </div>
                     <div>
-                      <p className="font-bold text-white">QAR 10 Voucher Unlocked!</p>
-                      <p className="text-white/70 text-[11px]">Your Jarir Bookstore voucher is ready.</p>
+                      <p className="font-bold text-white">Path Quests Completed!</p>
+                      <p className="text-white/70 text-[11px]">You completed all quests! Check the Reward Vault.</p>
                     </div>
                   </div>
                   <div className="p-3 rounded-2xl bg-white/5 border border-white/10 flex gap-3 items-start">

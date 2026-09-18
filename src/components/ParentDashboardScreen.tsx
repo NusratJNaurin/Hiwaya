@@ -1030,39 +1030,35 @@ export const ParentDashboardScreen: React.FC<ParentDashboardScreenProps> = ({
             </div>
 
             <div>
-              <h3 className="text-2xl font-extrabold">Hiwaya Parents Club</h3>
-              <p className="text-xs text-white/70 mt-1">
-                Connect with 2,400+ parents in Doha & Qatar. Share weekend workshop dates, craft ideas, and swap vouchers!
+              <div className="inline-flex items-center gap-1.5 bg-emerald-500/20 text-emerald-300 px-3 py-1 rounded-full text-xs font-black uppercase mb-2 border border-emerald-400/30">
+                <span className="material-symbols-outlined text-sm">info</span>
+                MVP Feature Status
+              </div>
+              <h3 className="text-2xl font-extrabold">WhatsApp Community</h3>
+              <p className="text-sm text-white/80 mt-2 leading-relaxed">
+                This feature isn't available in the current MVP yet. Check back in a future version.
               </p>
             </div>
 
-            <div className="p-3 bg-white/10 rounded-2xl text-xs space-y-1.5 text-left border border-white/20">
+            <div className="p-3.5 bg-white/5 rounded-2xl text-xs space-y-1.5 text-left border border-white/10 text-white/70">
               <div className="flex items-center gap-2 text-emerald-300 font-bold">
-                <span className="material-symbols-outlined text-sm">check_circle</span>
-                Moderated safe community
+                <span className="material-symbols-outlined text-sm">schedule</span>
+                Planned for upcoming release
               </div>
-              <div className="flex items-center gap-2 text-emerald-300 font-bold">
-                <span className="material-symbols-outlined text-sm">check_circle</span>
-                Weekly weekend craft meetups in Katara & Education City
-              </div>
+              <p className="text-[11px] leading-relaxed">
+                We are setting up dedicated Qatar parent groups for Katara and Education City weekend craft meetups!
+              </p>
             </div>
 
             <div className="flex gap-3">
               <button
-                onClick={() => setShowWhatsAppModal(false)}
-                className="flex-1 py-3 bg-white/10 hover:bg-white/20 text-white font-bold rounded-xl"
-              >
-                Close
-              </button>
-              <button
                 onClick={() => {
-                  sound.playChime();
-                  window.open('https://chat.whatsapp.com/', '_blank');
+                  sound.playPop();
                   setShowWhatsAppModal(false);
                 }}
-                className="flex-1 py-3 bg-[#25D366] hover:bg-emerald-600 text-white font-extrabold rounded-xl border border-white"
+                className="w-full py-3.5 bg-[#25D366] hover:bg-emerald-600 text-white font-extrabold rounded-xl border border-white/30 shadow-lg cursor-pointer transition-all text-sm"
               >
-                Join WhatsApp Group
+                Got It
               </button>
             </div>
           </div>
