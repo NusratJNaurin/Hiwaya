@@ -54,19 +54,16 @@ export const ParentDashboardScreen: React.FC<ParentDashboardScreenProps> = ({
   const [moderationFilter, setModerationFilter] = useState<'all' | 'pending' | 'published' | 'private'>('all');
   const [editingNoteCreationId, setEditingNoteCreationId] = useState<string | null>(null);
   const [noteInputText, setNoteInputText] = useState<string>('');
+  const [showPaywallModal, setShowPaywallModal] = useState<boolean>(false);
 
   const handleUpgradePlan = () => {
-    sound.playFanfare();
-    if (onUpgradeToPremium) {
-      onUpgradeToPremium(selectedFreeHobbyChoice);
-    }
+    sound.playPop();
+    setShowPaywallModal(true);
   };
 
-  const handleBuyAddon = (courseId: string) => {
-    sound.playFanfare();
-    if (onUnlockAdditionalHobby) {
-      onUnlockAdditionalHobby(courseId);
-    }
+  const handleBuyAddon = (_courseId: string) => {
+    sound.playPop();
+    setShowPaywallModal(true);
   };
 
   const toggleSafetyMode = () => {
@@ -390,7 +387,7 @@ export const ParentDashboardScreen: React.FC<ParentDashboardScreenProps> = ({
           <button
             onClick={() => {
               sound.playPop();
-              onNavigate('pricing');
+              setShowPaywallModal(true);
             }}
             className="btn-yellow-tactile px-4 py-2 rounded-2xl font-black text-xs flex items-center gap-1.5 shadow-md cursor-pointer shrink-0"
           >
@@ -529,7 +526,7 @@ export const ParentDashboardScreen: React.FC<ParentDashboardScreenProps> = ({
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="material-symbols-outlined text-yellow-400 text-sm shrink-0 mt-0.5">check_circle</span>
-                    <span><strong>**Katara & Education City</strong> weekend workshop VIP invitations</span>
+                    <span><strong>Katara & Education City</strong> weekend workshop VIP invitations</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="material-symbols-outlined text-yellow-400 text-sm shrink-0 mt-0.5">check_circle</span>
@@ -1092,6 +1089,66 @@ export const ParentDashboardScreen: React.FC<ParentDashboardScreenProps> = ({
               <p className="font-bold text-amber-300 mb-0.5">Feedback from {selectedCreation.coachName}:</p>
               <p className="italic">{selectedCreation.aiFeedback}</p>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* MVP Premium Access Paywall Modal */}
+      {showPaywallModal && (
+        <div
+          id="parent-hub-paywall-modal-overlay"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+          onClick={() => setShowPaywallModal(false)}
+        >
+          <div
+            id="parent-hub-paywall-modal-card"
+            className="max-w-md w-full bg-slate-900 border-2 border-amber-400/60 rounded-3xl p-6 sm:p-7 shadow-2xl relative text-center text-white"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Close Button */}
+            <button
+              id="parent-hub-paywall-modal-close-btn"
+              onClick={() => {
+                sound.playPop();
+                setShowPaywallModal(false);
+              }}
+              className="absolute top-4 right-4 w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white/80 hover:text-white flex items-center justify-center text-sm font-bold transition-all cursor-pointer"
+              aria-label="Close modal"
+            >
+              ✕
+            </button>
+
+            {/* Lock Badge */}
+            <div className="w-16 h-16 rounded-2xl bg-amber-400/20 border border-amber-400/40 text-amber-300 flex items-center justify-center mx-auto mb-4 text-3xl shadow-inner">
+              🔒
+            </div>
+
+            {/* Title */}
+            <h3 className="text-2xl font-black text-white tracking-tight mb-3">
+              Premium Access
+            </h3>
+
+            {/* Primary message */}
+            <p className="text-sm font-medium text-slate-200 leading-relaxed mb-3">
+              In-app purchases and family upgrades are not currently available in this MVP.
+            </p>
+
+            {/* Secondary note */}
+            <p className="text-xs text-slate-400 mb-6 font-normal">
+              This demo does not process real payments.
+            </p>
+
+            {/* Action button */}
+            <button
+              id="parent-hub-paywall-modal-dismiss-btn"
+              onClick={() => {
+                sound.playPop();
+                setShowPaywallModal(false);
+              }}
+              className="w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 font-black text-sm shadow-lg shadow-amber-500/25 transition-all cursor-pointer"
+            >
+              Got It
+            </button>
           </div>
         </div>
       )}

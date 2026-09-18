@@ -56,7 +56,7 @@ export const ParentPinModal: React.FC<ParentPinModalProps> = ({
         <div className="text-center">
           <h3 className="text-2xl font-extrabold">Parent Gate 🔒</h3>
           <p className="text-xs text-white/70 mt-1">
-            Grown-ups only! Enter your 4-digit PIN to access Parent Hub (Default: <span className="font-bold text-amber-300">1234</span>)
+            Grown-ups only! Enter your 4-digit PIN to access Parent Hub
           </p>
         </div>
 
