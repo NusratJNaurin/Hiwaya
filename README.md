@@ -2,7 +2,7 @@
 
 > *This is a demonstration version built during a Hackathon. Some features, including premium purchases, are not enabled.*
 
-<img width="2844" height="1450" alt="Screenshot 2026-09-13 135800" src="https://github.com/user-attachments/assets/6417958b-48c6-44e5-b201-eabf25aa2758" />
+<img width="2844" height="1450" alt="Hiwaya Landing Page" src="src/assets/images/Hiwaya_landing_page.png" />
 
 **Hiwaya (هواية)** is a gamified, safe, and interactive creative learning platform designed for kids and teens in Qatar. Learners embark on hands-on craft adventures—spanning Origami, Crochet, Painting, STEM Rocketry, Calligraphy, and Junior Finance—guided by animated AI companions, structured video masterclasses, interactive drawing pads, and intelligent project evaluation.
 
@@ -29,17 +29,9 @@
 
 ## 🖼️ Platform Walkthrough & Screenshots
 
-### 1. Explorer Map (Homepage)
-<img width="2350" height="1450" alt="front page2" src="https://github.com/user-attachments/assets/8d738a17-7757-49cd-9c74-cb9d4d928377" />
-Interactive quest progression system tracking student advancement through hobby tracks (Origami, Crochet, Painting, etc.), with locked modules that unlock as prerequisites are completed. Features video tutorials, XP milestones, and real-time progress metrics for learners.
-
-### 2. Makers Showcase & Gallery
-<img width="2850" height="1452" alt="Screenshot 2026-09-13 141616" src="https://github.com/user-attachments/assets/4e9df779-65d2-4b1d-aea5-705fa1580be4" />
-Community gallery where young creators showcase completed craft projects and skill milestones, earning digital badges and building a portfolio of their learning achievements.
-
-### 3. Parent Hub
-<img width="2798" height="1420" alt="Screenshot 2026-09-13 142425" src="https://github.com/user-attachments/assets/7271a1e1-1355-4377-a185-88fd871675d6" />
-Parental controls dashboard enabling parents to monitor children's hobby progress, manage screen time, approve gallery submissions, and allocate milestone-based rewards (e.g., Jarir Bookstore vouchers).
+|### Explorer Map (Homepage)|### Gallery|### Parent Hub|
+|---|---|---|
+|<img width="2350" height="1450" alt="homepage" src="src/assets/images/hiwaya_explorere map.png" />|<img width="2850" height="1452" alt="Hiwaya Gallery" src="src/assets/images/Hiwaya_gallery.png" />|<img width="2798" height="1420" alt="Hiwaya Parent Hub" src="src/assets/images/Hiwaya_parent_hub" />| 
 
 ---
 
