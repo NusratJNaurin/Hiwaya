@@ -2,7 +2,7 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     
-    // Helper functions
+    // Core authentication & authorization helpers
     function isAuthenticated() {
       return request.auth != null;
     }
@@ -11,9 +11,23 @@ service cloud.firestore {
       return isAuthenticated() && request.auth.uid == userId;
     }
 
-    // User profile document
+    function isParent() {
+      return isAuthenticated() && 
+        exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.userRole == 'parent';
+    }
+
+    // Default deny for all unmatched collections
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // User profile documents & course progress
     match /users/{userId} {
-      allow read, write: if isOwner(userId);
+      allow read: if isOwner(userId);
+      allow create: if isOwner(userId) && request.resource.data.id == userId;
+      allow update: if isOwner(userId) && request.resource.data.id == resource.data.id;
+      allow delete: if isOwner(userId);
       
       // Quest progress subcollection per course
       match /quest_progress/{courseId} {
@@ -21,21 +35,35 @@ service cloud.firestore {
       }
     }
 
-    // Creations collection for physical crafts & gallery
+    // Creations collection for physical crafts & community gallery
     match /creations/{creationId} {
       // Allow reading published creations or owner's creations
       allow read: if resource == null 
                   || resource.data.publishedToGallery == true 
-                  || (isAuthenticated() && resource.data.userId == request.auth.uid);
+                  || (isAuthenticated() && (resource.data.userId == request.auth.uid || isParent()));
       
-      // Allow creating by logged-in users
-      allow create: if isAuthenticated();
+      // Strict creation rule: must be authenticated and cannot spoof userId
+      allow create: if isAuthenticated() 
+                    && request.resource.data.userId == request.auth.uid
+                    && request.resource.data.title is string
+                    && request.resource.data.title.size() > 0
+                    && request.resource.data.title.size() <= 100;
 
-      // Allow updating by owner or updating likes/reactions
-      allow update: if isAuthenticated();
+      // Granular update rules:
+      // 1. The original creator can update content, but cannot reassign the owner ID
+      // 2. Any authenticated user can like or react (only likesCount and reactions fields can change)
+      // 3. Parents can moderate or approve creations
+      allow update: if isAuthenticated() && (
+        (resource.data.userId == request.auth.uid && request.resource.data.userId == resource.data.userId)
+        ||
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['likesCount', 'reactions'])
+        ||
+        (isParent() && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['isApprovedByParent', 'moderationStatus', 'publishedToGallery', 'approvedAt', 'parentNote']))
+      );
       
-      // Allow deletion by owner
-      allow delete: if isAuthenticated() && resource.data.userId == request.auth.uid;
+      // Allow deletion only by creation owner or a verified parent
+      allow delete: if isAuthenticated() && (resource.data.userId == request.auth.uid || isParent());
     }
   }
 }
+

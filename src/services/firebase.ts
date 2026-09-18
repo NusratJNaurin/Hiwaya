@@ -23,9 +23,23 @@ import {
   limit,
   serverTimestamp
 } from 'firebase/firestore';
-import firebaseConfig from '../../firebase-applet-config.json';
+import rawConfigFile from '../../firebase-applet-config.json';
 import { UserProfile, CreationUpload, MapNode } from '../types';
 import { INITIAL_USER_PROFILE, INITIAL_CREATIONS } from '../data/mockData';
+
+// Resolve configuration: prioritize environment variables (e.g., in production or clean Git clones)
+// with fallback to local firebase-applet-config.json for seamless AI Studio tooling compatibility.
+export const firebaseConfig = {
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || rawConfigFile.projectId || '',
+  appId: import.meta.env.VITE_FIREBASE_APP_ID || rawConfigFile.appId || '',
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || rawConfigFile.apiKey || '',
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || rawConfigFile.authDomain || '',
+  firestoreDatabaseId: import.meta.env.VITE_FIREBASE_DATABASE_ID || rawConfigFile.firestoreDatabaseId || '(default)',
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || rawConfigFile.storageBucket || '',
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || rawConfigFile.messagingSenderId || '',
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID || rawConfigFile.measurementId || '',
+  oAuthClientId: import.meta.env.VITE_FIREBASE_OAUTH_CLIENT_ID || rawConfigFile.oAuthClientId || '',
+};
 
 // 1. Initialize Firebase App
 export const firebaseApp = initializeApp(firebaseConfig);

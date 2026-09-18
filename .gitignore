@@ -4,5 +4,28 @@ dist/
 coverage/
 .DS_Store
 *.log
+
+# Local environment & secret variables
+.env
+.env.local
+.env.*.local
+.env.development
+.env.test
+.env.production
 .env*
 !.env.example
+
+# Private credentials, certificates, and service accounts
+*.pem
+*.key
+*.cert
+*.p12
+*.p8
+credentials.json
+service-account*.json
+serviceAccountKey*.json
+
+# Active platform Firebase config (contains project-specific credentials)
+firebase-applet-config.json
+!firebase-applet-config.example.json
+
