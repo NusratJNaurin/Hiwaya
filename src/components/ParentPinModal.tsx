@@ -23,7 +23,7 @@ export const ParentPinModal: React.FC<ParentPinModalProps> = ({
       const newPin = pin + digit;
       setPin(newPin);
       if (newPin.length === 4) {
-        if (newPin === '1234' || newPin === '0000' || newPin.length === 4) {
+        if (newPin === '1234' || newPin === '0000') {
           sound.playChime();
           setTimeout(() => {
             setPin('');
@@ -54,9 +54,9 @@ export const ParentPinModal: React.FC<ParentPinModalProps> = ({
         </div>
 
         <div className="text-center">
-          <h3 className="text-2xl font-extrabold">Parent Gate</h3>
+          <h3 className="text-2xl font-extrabold">Parent Gate 🔒</h3>
           <p className="text-xs text-white/70 mt-1">
-            Enter PIN (Default: 1234 or any 4 digits) to access dashboard
+            Grown-ups only! Enter your 4-digit PIN to access Parent Hub (Default: <span className="font-bold text-amber-300">1234</span>)
           </p>
         </div>
 

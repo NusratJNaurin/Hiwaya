@@ -14,6 +14,7 @@ interface AdventureMapScreenProps {
   onSelectCourse?: (courseId: string) => void;
   onSelectNode?: (nodeId: string) => void;
   isRewardUnlocked?: boolean;
+  onOpenParentPin?: () => void;
 }
 
 export const AdventureMapScreen: React.FC<AdventureMapScreenProps> = ({
@@ -25,7 +26,8 @@ export const AdventureMapScreen: React.FC<AdventureMapScreenProps> = ({
   selectedCourseId = 'origami',
   onSelectCourse,
   onSelectNode,
-  isRewardUnlocked = false
+  isRewardUnlocked = false,
+  onOpenParentPin
 }) => {
   const nodes = propNodes || INITIAL_MAP_NODES;
   const [mapMode, setMapMode] = useState<'track' | 'island'>('track');
@@ -568,10 +570,17 @@ export const AdventureMapScreen: React.FC<AdventureMapScreenProps> = ({
               <button
                 onClick={() => {
                   sound.playPop();
-                  onNavigate('parent-hub');
+                  if (userProfile.userRole === 'parent') {
+                    onNavigate('parent-hub');
+                  } else if (onOpenParentPin) {
+                    onOpenParentPin();
+                  } else {
+                    onNavigate('parent-hub');
+                  }
                 }}
                 className="w-full bg-indigo-50 hover:bg-indigo-100 text-indigo-600 font-black text-xs py-3 rounded-2xl border border-indigo-200 transition-all text-center flex items-center justify-center gap-1.5 cursor-pointer"
               >
+                <span className="material-symbols-outlined text-sm">lock</span>
                 <span>Open Parent Analytics & Controls</span>
                 <span className="material-symbols-outlined text-sm">arrow_forward</span>
               </button>
@@ -754,7 +763,13 @@ export const AdventureMapScreen: React.FC<AdventureMapScreenProps> = ({
           <button
             onClick={() => {
               sound.playPop();
-              onNavigate('parent-hub');
+              if (userProfile.userRole === 'parent') {
+                onNavigate('parent-hub');
+              } else if (onOpenParentPin) {
+                onOpenParentPin();
+              } else {
+                onNavigate('parent-hub');
+              }
             }}
             className="flex flex-col items-center text-pink-300 p-2 hover:text-pink-200 cursor-pointer"
           >

@@ -98,10 +98,16 @@ export default function App() {
     return () => unsubscribe();
   }, [selectedCourseId]);
 
-  const navigateTo = (screen: AppScreen) => {
+  const navigateTo = (screen: AppScreen, skipParentGate = false) => {
     // Prevent teens from accessing parent-hub
     if (screen === 'parent-hub' && (userProfile.userRole === 'learner_teen' || userProfile.ageGroup === 'teen_13_plus')) {
       screen = 'adventure-map';
+    }
+
+    // Parental Gate check: If user is child or non-parent and attempting to open parent-hub, trigger PIN gate
+    if (screen === 'parent-hub' && userProfile.userRole !== 'parent' && !skipParentGate) {
+      setShowParentPin(true);
+      return;
     }
 
     // Security & entitlement check: block navigating to quest lessons if course is premium locked
@@ -529,6 +535,7 @@ export default function App() {
             onSelectCourse={handleCourseChange}
             isRewardUnlocked={isRewardUnlocked}
             onNavigate={navigateTo}
+            onOpenParentPin={() => setShowParentPin(true)}
             onSelectNode={(nodeId) => {
               handleModuleSelect(nodeId);
             }}
@@ -598,6 +605,7 @@ export default function App() {
             onNavigate={navigateTo}
             onUpgradeToPremium={handleUpgradeToPremium}
             onUnlockAdditionalHobby={handleUnlockAdditionalHobby}
+            onOpenParentPin={() => setShowParentPin(true)}
           />
         )}
       </main>
@@ -613,7 +621,7 @@ export default function App() {
         onClose={() => setShowParentPin(false)}
         onSuccess={() => {
           setShowParentPin(false);
-          navigateTo('parent-hub');
+          navigateTo('parent-hub', true);
         }}
       />
     </div>

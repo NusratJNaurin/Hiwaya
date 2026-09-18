@@ -9,13 +9,15 @@ interface PricingScreenProps {
   onNavigate: (screen: AppScreen) => void;
   onUpgradeToPremium?: (chosenHobbyId?: string) => void;
   onUnlockAdditionalHobby?: (hobbyId: string) => void;
+  onOpenParentPin?: () => void;
 }
 
 export const PricingScreen: React.FC<PricingScreenProps> = ({
   userProfile,
   onNavigate,
   onUpgradeToPremium,
-  onUnlockAdditionalHobby
+  onUnlockAdditionalHobby,
+  onOpenParentPin
 }) => {
   const isCurrentlyPremium = userProfile.membershipPlan === 'premium';
   const isTeen = userProfile.userRole === 'learner_teen' || userProfile.ageGroup === 'teen_13_plus';
@@ -88,7 +90,13 @@ export const PricingScreen: React.FC<PricingScreenProps> = ({
           <button
             onClick={() => {
               sound.playPop();
-              onNavigate('parent-hub');
+              if (userProfile.userRole === 'parent') {
+                onNavigate('parent-hub');
+              } else if (onOpenParentPin) {
+                onOpenParentPin();
+              } else {
+                onNavigate('parent-hub');
+              }
             }}
             className="bg-white/10 hover:bg-white/20 text-indigo-100 px-4 py-2 rounded-2xl font-bold text-xs flex items-center gap-1.5 border border-white/20 transition-all cursor-pointer"
           >

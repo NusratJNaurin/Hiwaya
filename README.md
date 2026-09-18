@@ -29,10 +29,14 @@
 
 ## 🖼️ Platform Walkthrough & Screenshots
 
-|### Explorer Map (Homepage)|### Gallery|### Parent Hub|
-|---|---|---|
-|<img width="2350" height="1450" alt="homepage" src="src/assets/images/hiwaya_explorere map.png" />|<img width="2850" height="1452" alt="Hiwaya Gallery" src="src/assets/images/Hiwaya_gallery.png" />|<img width="2798" height="1420" alt="Hiwaya Parent Hub" src="src/assets/images/Hiwaya_parent_hub" />| 
+### Explorer Map (Homepage)
+![homepage](src/assets/images/hiwaya_explorere%20map.png)
 
+### Gallery
+![Hiwaya Gallery](src/assets/images/Hiwaya_gallery.png)
+
+### Parent Hub
+![Hiwaya Parent Hub](src/assets/images/Hiwaya_parent_hub.png)
 ---
 
 ## 🛠️ Tech Stack
