@@ -23,22 +23,45 @@ import {
   limit,
   serverTimestamp
 } from 'firebase/firestore';
-import rawConfigFile from '../../firebase-applet-config.json';
 import { UserProfile, CreationUpload, MapNode } from '../types';
 import { INITIAL_USER_PROFILE, INITIAL_CREATIONS } from '../data/mockData';
 
-// Resolve configuration: prioritize environment variables (e.g., in production or clean Git clones)
-// with fallback to local firebase-applet-config.json for seamless AI Studio tooling compatibility.
+interface FirebaseConfigValues {
+  projectId?: string;
+  appId?: string;
+  apiKey?: string;
+  authDomain?: string;
+  firestoreDatabaseId?: string;
+  storageBucket?: string;
+  messagingSenderId?: string;
+  measurementId?: string;
+  oAuthClientId?: string;
+}
+
+// Safely attempt optional local config loading without failing Vite/Vercel production builds
+// when firebase-applet-config.json is absent in Git.
+const optionalLocalConfigs = import.meta.glob<{ default: FirebaseConfigValues }>(
+  ['/firebase-applet-config.json', '../../firebase-applet-config.json'],
+  { eager: true }
+);
+
+const localConfigFile: FirebaseConfigValues =
+  optionalLocalConfigs['/firebase-applet-config.json']?.default ||
+  optionalLocalConfigs['../../firebase-applet-config.json']?.default ||
+  {};
+
+// Resolve configuration: prioritize environment variables (essential for Vercel and CI)
+// with fallback to optional local development config.
 export const firebaseConfig = {
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || rawConfigFile.projectId || '',
-  appId: import.meta.env.VITE_FIREBASE_APP_ID || rawConfigFile.appId || '',
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || rawConfigFile.apiKey || '',
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || rawConfigFile.authDomain || '',
-  firestoreDatabaseId: import.meta.env.VITE_FIREBASE_DATABASE_ID || rawConfigFile.firestoreDatabaseId || '(default)',
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || rawConfigFile.storageBucket || '',
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || rawConfigFile.messagingSenderId || '',
-  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID || rawConfigFile.measurementId || '',
-  oAuthClientId: import.meta.env.VITE_FIREBASE_OAUTH_CLIENT_ID || rawConfigFile.oAuthClientId || '',
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || localConfigFile.projectId || '',
+  appId: import.meta.env.VITE_FIREBASE_APP_ID || localConfigFile.appId || '',
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || localConfigFile.apiKey || '',
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || localConfigFile.authDomain || '',
+  firestoreDatabaseId: import.meta.env.VITE_FIREBASE_DATABASE_ID || localConfigFile.firestoreDatabaseId || '(default)',
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || localConfigFile.storageBucket || '',
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || localConfigFile.messagingSenderId || '',
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID || localConfigFile.measurementId || '',
+  oAuthClientId: import.meta.env.VITE_FIREBASE_OAUTH_CLIENT_ID || localConfigFile.oAuthClientId || '',
 };
 
 // 1. Initialize Firebase App
