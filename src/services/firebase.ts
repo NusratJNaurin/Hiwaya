@@ -88,9 +88,11 @@ export const googleProvider = new GoogleAuthProvider();
 googleProvider.setCustomParameters({ prompt: 'select_account' });
 
 // 3. Initialize Firestore with named database ID if configured
-export const db = isFirebaseConfigured && firebaseConfig.firestoreDatabaseId && firebaseConfig.firestoreDatabaseId !== '(default)'
-  ? getFirestore(firebaseApp, firebaseConfig.firestoreDatabaseId)
-  : getFirestore(firebaseApp);
+export const db = isFirebaseConfigured
+  ? (firebaseConfig.firestoreDatabaseId && firebaseConfig.firestoreDatabaseId !== '(default)'
+      ? getFirestore(firebaseApp, firebaseConfig.firestoreDatabaseId)
+      : getFirestore(firebaseApp))
+  : null;
 
 // ============================================================================
 // AUTHENTICATION SERVICES
@@ -170,6 +172,7 @@ export function subscribeToAuth(callback: (user: FirebaseUser | null) => void) {
 // ============================================================================
 
 export async function fetchUserProfile(uid: string): Promise<UserProfile | null> {
+  if (!db) return null;
   try {
     const userDocRef = doc(db, 'users', uid);
     const snap = await getDoc(userDocRef);
@@ -178,12 +181,13 @@ export async function fetchUserProfile(uid: string): Promise<UserProfile | null>
     }
     return null;
   } catch (err) {
-    console.error('Failed to fetch user profile from Firestore:', err);
+    console.warn('Could not fetch user profile from Firestore:', err);
     return null;
   }
 }
 
 export async function saveUserProfile(uid: string, profile: Partial<UserProfile>): Promise<void> {
+  if (!db) return;
   try {
     const userDocRef = doc(db, 'users', uid);
     await setDoc(userDocRef, {
@@ -191,7 +195,7 @@ export async function saveUserProfile(uid: string, profile: Partial<UserProfile>
       updatedAt: new Date().toISOString()
     }, { merge: true });
   } catch (err) {
-    console.error('Failed to save user profile to Firestore:', err);
+    console.warn('Could not save user profile to Firestore:', err);
   }
 }
 
@@ -212,6 +216,7 @@ export interface CourseProgressRecord {
  * Load user's saved quest progress for a specific course
  */
 export async function fetchCourseProgress(uid: string, courseId: string): Promise<CourseProgressRecord | null> {
+  if (!db) return null;
   try {
     const progressRef = doc(db, 'users', uid, 'quest_progress', courseId);
     const snap = await getDoc(progressRef);
@@ -220,7 +225,7 @@ export async function fetchCourseProgress(uid: string, courseId: string): Promis
     }
     return null;
   } catch (err) {
-    console.error(`Failed to fetch quest progress for ${courseId}:`, err);
+    console.warn(`Could not fetch quest progress for ${courseId}:`, err);
     return null;
   }
 }
@@ -233,6 +238,7 @@ export async function saveCourseProgress(
   courseId: string, 
   modules: MapNode[]
 ): Promise<void> {
+  if (!db) return;
   try {
     const progressRef = doc(db, 'users', uid, 'quest_progress', courseId);
     
@@ -259,7 +265,7 @@ export async function saveCourseProgress(
 
     await setDoc(progressRef, record, { merge: true });
   } catch (err) {
-    console.error(`Failed to save quest progress for ${courseId}:`, err);
+    console.warn(`Could not save quest progress for ${courseId}:`, err);
   }
 }
 
@@ -268,6 +274,9 @@ export async function saveCourseProgress(
 // ============================================================================
 
 export async function fetchCreations(): Promise<CreationUpload[]> {
+  if (!db) {
+    return INITIAL_CREATIONS;
+  }
   try {
     const creationsRef = collection(db, 'creations');
     const q = query(creationsRef, orderBy('uploadedAt', 'desc'), limit(50));
@@ -291,6 +300,7 @@ export async function fetchCreations(): Promise<CreationUpload[]> {
 }
 
 export async function uploadCreation(creation: CreationUpload, uid?: string): Promise<void> {
+  if (!db) return;
   try {
     const creationDoc = doc(db, 'creations', creation.id);
     await setDoc(creationDoc, {
@@ -299,16 +309,17 @@ export async function uploadCreation(creation: CreationUpload, uid?: string): Pr
       createdAt: new Date().toISOString()
     });
   } catch (err) {
-    console.error('Failed to upload creation to Firestore:', err);
+    console.warn('Could not upload creation to Firestore:', err);
   }
 }
 
 export async function updateCreationInDb(id: string, updates: Partial<CreationUpload>): Promise<void> {
+  if (!db) return;
   try {
     const creationDoc = doc(db, 'creations', id);
     await updateDoc(creationDoc, updates);
   } catch (err) {
-    console.warn('Failed to update creation in Firestore:', err);
+    console.warn('Could not update creation in Firestore:', err);
   }
 }
 
