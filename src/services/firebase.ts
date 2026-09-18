@@ -64,16 +64,31 @@ export const firebaseConfig = {
   oAuthClientId: import.meta.env.VITE_FIREBASE_OAUTH_CLIENT_ID || localConfigFile.oAuthClientId || '',
 };
 
-// 1. Initialize Firebase App
-export const firebaseApp = initializeApp(firebaseConfig);
+export const isFirebaseConfigured = Boolean(firebaseConfig.apiKey && firebaseConfig.projectId);
 
-// 2. Initialize Auth
+// Safe fallback configuration to ensure the application bundle never throws a fatal
+// initialization error even if configuration files or environment variables are absent.
+const activeConfig = isFirebaseConfigured
+  ? firebaseConfig
+  : {
+      projectId: 'hiwaya-preview',
+      appId: '1:111111111111:web:placeholder0000000',
+      apiKey: 'AIzaSyDummyPreviewKeyForOfflineBrowsing000',
+      authDomain: 'hiwaya-preview.firebaseapp.com',
+      storageBucket: 'hiwaya-preview.firebasestorage.app',
+      messagingSenderId: '111111111111',
+    };
+
+// 1. Initialize Firebase App safely
+export const firebaseApp = initializeApp(activeConfig);
+
+// 2. Initialize Auth safely
 export const auth = getAuth(firebaseApp);
 export const googleProvider = new GoogleAuthProvider();
 googleProvider.setCustomParameters({ prompt: 'select_account' });
 
 // 3. Initialize Firestore with named database ID if configured
-export const db = firebaseConfig.firestoreDatabaseId && firebaseConfig.firestoreDatabaseId !== '(default)'
+export const db = isFirebaseConfigured && firebaseConfig.firestoreDatabaseId && firebaseConfig.firestoreDatabaseId !== '(default)'
   ? getFirestore(firebaseApp, firebaseConfig.firestoreDatabaseId)
   : getFirestore(firebaseApp);
 
@@ -143,6 +158,10 @@ export async function logOutUser(): Promise<void> {
  * Listen for auth state changes
  */
 export function subscribeToAuth(callback: (user: FirebaseUser | null) => void) {
+  if (!isFirebaseConfigured) {
+    callback(null);
+    return () => {};
+  }
   return onAuthStateChanged(auth, callback);
 }
 
